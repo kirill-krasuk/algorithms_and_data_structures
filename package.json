@@ -1,0 +1,32 @@
+{
+	"name": "algorithms_and_data_structures",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest",
+		"math": "ts-node ./algorithms/math/euclidian",
+		"sort": "ts-node ./algorithms/sorting/playground",
+		"search": "ts-node ./algorithms/searching/binary",
+		"graph_representation": "ts-node ./data_structures/graphs/representation",
+		"permutation": "ts-node ./permutations"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@types/jest": "^28.1.5",
+		"eslint-import-resolver-typescript": "^3.2.5",
+		"eslint-plugin-jest": "^26.5.3",
+		"jest": "^28.1.3",
+		"ts-jest": "^28.0.5",
+		"ts-node": "^10.8.2",
+		"typescript": "^4.9.3"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.30.6",
+		"@typescript-eslint/parser": "^5.30.6",
+		"eslint": "^8.19.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-plugin-import": "^2.26.0"
+	}
+}
