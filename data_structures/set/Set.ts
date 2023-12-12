@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import LinkedList from '../list/linked-list/LinkedList';
 
 class Set<T> {
