@@ -1,10 +1,14 @@
 import allValuesAreEqual from '../../../../utils/allValuesAreEqual';
+import minMax from '../../../../utils/minMax';
 import insertionSort from '../../insertion/insertion';
 
 /**
  * Определение индекса ведра = определение процента от максимального значения
  * и подгон под размерность ведра:
- * Math.floor((arr[i] / (max + 1)) * bucketSize)
+ * Math.floor((arr[i] - min / (max - min + 1)) * bucketSize)
+ *
+ * вычитание min нужно для того, чтобы сдвинуть значения ведра влево, то есть для индекса
+ * иметь только положительные значения
  *
  * работает как для интов так и для флоатов
  *
@@ -18,8 +22,6 @@ import insertionSort from '../../insertion/insertion';
  * Math.floor(arr[i] * bucketSize) - float
  */
 
-// FIXME: сортировка ведрами не работает с отрицательными числами
-
 /**
  * Сортировка ведрами:
  *
@@ -29,10 +31,10 @@ import insertionSort from '../../insertion/insertion';
 function bucketSort(arr: number[], bucketSize = 10) {
 	const buckets = [...new Array(bucketSize)].map<number[]>(() => []);
 
-	const max = Math.max(...arr);
+	const [min, max] = minMax(arr);
 
 	for (const value of arr) {
-		const bucketIndex = Math.floor((value / (max + 1)) * bucketSize);
+		const bucketIndex = Math.floor(((value - min) / (max - min + 1)) * bucketSize);
 		buckets[bucketIndex].push(value);
 	}
 
@@ -62,10 +64,10 @@ function bucketSort(arr: number[], bucketSize = 10) {
 function bucketSortRecursive(arr: number[], bucketSize = 10) {
 	const buckets = [...new Array(bucketSize)].map<number[]>(() => []);
 
-	const max = Math.max(...arr);
+	const [min, max] = minMax(arr);
 
 	for (const value of arr) {
-		const bucketIndex = Math.floor((value / (max + 1)) * bucketSize);
+		const bucketIndex = Math.floor(((value - min) / (max - min + 1)) * bucketSize);
 		buckets[bucketIndex].push(value);
 	}
 
