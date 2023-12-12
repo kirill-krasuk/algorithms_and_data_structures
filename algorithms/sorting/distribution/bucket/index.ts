@@ -31,21 +31,19 @@ function bucketSort(arr: number[], bucketSize = 10) {
 
 	const max = Math.max(...arr);
 
-	for (let i = 0; i < arr.length; i++) {
-		const bucketIndex = Math.floor((arr[i] / (max + 1)) * bucketSize);
-		buckets[bucketIndex].push(arr[i]);
+	for (const value of arr) {
+		const bucketIndex = Math.floor((value / (max + 1)) * bucketSize);
+		buckets[bucketIndex].push(value);
 	}
 
-	for (let i = 0; i < buckets.length; i++) {
-		insertionSort(buckets[i]);
+	for (const bucket of buckets) {
+		insertionSort(bucket);
 	}
 
 	let sortedIndex = 0;
-	for (let i = 0; i < buckets.length; i++) {
-		const bucket = buckets[i];
-
-		for (let j = 0; j < bucket.length; j++) {
-			arr[sortedIndex++] = bucket[j];
+	for (const bucket of buckets) {
+		for (const value of bucket) {
+			arr[sortedIndex++] = value;
 		}
 	}
 
@@ -66,30 +64,25 @@ function bucketSortRecursive(arr: number[], bucketSize = 10) {
 
 	const max = Math.max(...arr);
 
-	for (let i = 0; i < arr.length; i++) {
-		const bucketIndex = Math.floor((arr[i] / (max + 1)) * bucketSize);
-		buckets[bucketIndex].push(arr[i]);
+	for (const value of arr) {
+		const bucketIndex = Math.floor((value / (max + 1)) * bucketSize);
+		buckets[bucketIndex].push(value);
 	}
 
-	for (let i = 0; i < buckets.length; i++) {
-		if (buckets[i].length > 1 && !allValuesAreEqual(buckets[i])) {
-			bucketSortRecursive(buckets[i], bucketSize);
+	for (const bucket of buckets) {
+		if (bucket.length > 1 && !allValuesAreEqual(bucket)) {
+			bucketSortRecursive(bucket, bucketSize);
 		}
 	}
 
 	let sortedIndex = 0;
-	for (let i = 0; i < buckets.length; i++) {
-		const bucket = buckets[i];
-
-		for (let j = 0; j < bucket.length; j++) {
-			arr[sortedIndex++] = bucket[j];
+	for (const bucket of buckets) {
+		for (const value of bucket) {
+			arr[sortedIndex++] = value;
 		}
 	}
 
 	return arr;
 }
 
-export default {
-	bucketSort,
-	bucketSortRecursive,
-};
+export { bucketSort, bucketSortRecursive };

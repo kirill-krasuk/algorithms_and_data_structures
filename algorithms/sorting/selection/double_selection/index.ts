@@ -1,6 +1,10 @@
+import defaultComparator from '../../../../utils/comparator';
 import swap from '../../../../utils/swap';
 
-function doubleSelectionSort(arr: number[]) {
+function doubleSelectionSort<T>(
+	arr: T[],
+	comparator: (a: T, b: T) => number = defaultComparator,
+) {
 	let left = 0;
 	let right = arr.length - 1;
 
@@ -9,11 +13,11 @@ function doubleSelectionSort(arr: number[]) {
 		let max = right;
 
 		for (let i = left; i <= right; i++) {
-			if (arr[i] < arr[min]) {
+			if (comparator(arr[i], arr[min]) < 0) {
 				min = i;
 			}
 
-			if (arr[i] > arr[max]) {
+			if (comparator(arr[i], arr[max]) > 0) {
 				max = i;
 			}
 		}

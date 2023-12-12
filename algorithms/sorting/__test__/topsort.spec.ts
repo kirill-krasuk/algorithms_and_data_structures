@@ -1,4 +1,4 @@
-import topologicalSort, { Graph } from '.';
+import topologicalSort, { Graph } from '../topological';
 
 describe('Topological sort', () => {
 	it('should return a sorted list of vertices in a directed acyclic graph', () => {

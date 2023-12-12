@@ -1,3 +1,4 @@
+import defaultComparator from '../../../../utils/comparator';
 import swap from '../../../../utils/swap';
 
 /**
@@ -31,7 +32,7 @@ function shellSort<T>(arr: T[]) {
 
  */
 
-function shellSort<T>(arr: T[]) {
+function shellSort<T>(arr: T[], comparator: (a: T, b: T) => number = defaultComparator) {
 	let gap = Math.floor(arr.length / 2);
 
 	while (gap > 0) {
@@ -40,7 +41,7 @@ function shellSort<T>(arr: T[]) {
 			let gapShiftedIndex = gap + i;
 
 			while (currentIndex >= 0) {
-				if (arr[currentIndex] > arr[gapShiftedIndex]) {
+				if (comparator(arr[currentIndex], arr[gapShiftedIndex]) > 0) {
 					swap(arr, currentIndex, gapShiftedIndex);
 				}
 

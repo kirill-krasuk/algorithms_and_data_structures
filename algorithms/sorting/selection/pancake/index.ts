@@ -1,11 +1,15 @@
+import defaultComparator from '../../../../utils/comparator';
 import flip from '../../../../utils/flip';
 
-function pancakeSort(arr: number[]) {
+function pancakeSort<T>(
+	arr: T[],
+	comparator: (a: T, b: T) => number = defaultComparator,
+) {
 	for (let i = arr.length; i > 1; i--) {
 		let max = 0;
 
 		for (let j = 1; j < i; j++) {
-			if (arr[j] > arr[max]) {
+			if (comparator(arr[j], arr[max]) > 0) {
 				max = j;
 			}
 		}

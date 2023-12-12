@@ -1,4 +1,5 @@
-/* eslint-disable no-use-before-define */
+import defaultComparator from '../../../../utils/comparator';
+
 class TreeNode<T> {
 	value: T;
 	left: TreeNode<T> | null;
@@ -11,15 +12,19 @@ class TreeNode<T> {
 	}
 }
 
-function insert<T>(root: TreeNode<T> | null, value: T) {
+function insert<T>(
+	root: TreeNode<T> | null,
+	value: T,
+	comparator: (a: T, b: T) => number,
+) {
 	if (root === null) {
 		return new TreeNode(value);
 	}
 
-	if (value <= root.value) {
-		root.left = insert(root.left, value);
+	if (comparator(value, root.value) < 0) {
+		root.left = insert(root.left, value, comparator);
 	} else {
-		root.right = insert(root.right, value);
+		root.right = insert(root.right, value, comparator);
 	}
 
 	return root;
@@ -35,11 +40,11 @@ function inOrderTraversal<T>(root: TreeNode<T> | null, array: T[]) {
 	inOrderTraversal(root.right, array);
 }
 
-function treeSort<T>(array: T[]) {
+function treeSort<T>(array: T[], comparator: (a: T, b: T) => number = defaultComparator) {
 	let root = null;
 
-	for (let i = 0; i < array.length; i++) {
-		root = insert(root, array[i]);
+	for (const value of array) {
+		root = insert(root, value, comparator);
 	}
 
 	const sortedArray: T[] = [];

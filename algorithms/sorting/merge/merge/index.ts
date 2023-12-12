@@ -1,8 +1,10 @@
-function merge<T>(left: T[], right: T[]) {
+import defaultComparator from '../../../../utils/comparator';
+
+function merge<T>(left: T[], right: T[], comparator: (a: T, b: T) => number) {
 	const result = [];
 
 	while (left.length && right.length) {
-		if (left[0] < right[0]) {
+		if (comparator(left[0], right[0]) < 0) {
 			result.push(left.shift());
 		} else {
 			result.push(right.shift());
@@ -12,7 +14,10 @@ function merge<T>(left: T[], right: T[]) {
 	return [...result, ...left, ...right];
 }
 
-function mergeSort<T>(arr: T[]): (T | undefined)[] {
+function mergeSort<T>(
+	arr: T[],
+	comparator: (a: T, b: T) => number = defaultComparator,
+): T[] {
 	if (arr.length <= 1) {
 		return arr;
 	}
@@ -21,7 +26,11 @@ function mergeSort<T>(arr: T[]): (T | undefined)[] {
 	const left = arr.slice(0, middle);
 	const right = arr.slice(middle);
 
-	return merge(mergeSort(left), mergeSort(right));
+	return merge(
+		mergeSort(left, comparator),
+		mergeSort(right, comparator),
+		comparator,
+	) as T[];
 }
 
 export default mergeSort;

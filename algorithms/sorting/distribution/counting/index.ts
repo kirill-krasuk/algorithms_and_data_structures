@@ -4,8 +4,8 @@ function countingSort(arr: number[]) {
 	const [min, max] = minMax(arr);
 	const buckets = new Array(max - min + 1).fill(0);
 
-	for (let i = 0; i < arr.length; i++) {
-		buckets[arr[i] - min]++;
+	for (const value of arr) {
+		buckets[value - min]++;
 	}
 
 	let sortedIndex = 0;

@@ -9,22 +9,17 @@ function lsdSort(arr: number[], radix = 10) {
 	let power = 1;
 
 	for (let pow = 0; pow < maxDigits; pow++) {
-		for (let i = 0; i < arr.length; i++) {
-			const bucketIndex = Math.floor((arr[i] / power) % radix);
-			buckets[bucketIndex].push(arr[i]);
+		for (const num of arr) {
+			const bucketIndex = Math.floor((num / power) % radix);
+			buckets[bucketIndex].push(num);
 		}
 
 		let sortedIndex = 0;
-		for (let i = 0; i < buckets.length; i++) {
-			const bucket = buckets[i];
-
-			for (let j = 0; j < bucket.length; j++) {
-				arr[sortedIndex++] = bucket[j];
+		for (const bucket of buckets) {
+			for (const num of bucket) {
+				arr[sortedIndex++] = num;
 			}
 
-			/**
-			 * очищаем ведра для последующих заполнений
-			 */
 			bucket.length = 0;
 		}
 

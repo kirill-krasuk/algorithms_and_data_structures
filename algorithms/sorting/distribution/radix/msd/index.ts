@@ -5,26 +5,24 @@ function sort(arr: number[], power: number, radix = 10) {
 
 	const buckets = new Array(radix).fill(0).map<number[]>(() => []);
 
-	for (let i = 0; i < arr.length; i++) {
-		const bucketIndex = Math.floor((arr[i] / radix ** (power - 1)) % radix);
-		buckets[bucketIndex].push(arr[i]);
+	for (const num of arr) {
+		const bucketIndex = Math.floor((num / radix ** (power - 1)) % radix);
+		buckets[bucketIndex].push(num);
 	}
 
 	let sortedIndex = 0;
-	for (let i = 0; i < buckets.length; i++) {
-		const bucket = buckets[i];
-
+	for (const bucket of buckets) {
 		if (power === 1) {
-			for (let j = 0; j < bucket.length; j++) {
-				arr[sortedIndex++] = bucket[j];
+			for (const num of bucket) {
+				arr[sortedIndex++] = num;
 			}
 		} else {
 			if (bucket.length > 1) {
 				sort(bucket, power - 1);
 			}
 
-			for (let j = 0; j < bucket.length; j++) {
-				arr[sortedIndex++] = bucket[j];
+			for (const num of bucket) {
+				arr[sortedIndex++] = num;
 			}
 		}
 
