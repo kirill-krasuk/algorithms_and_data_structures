@@ -23,6 +23,7 @@
 	"plugins": ["@typescript-eslint", "jest"],
 	"rules": {
 		"no-restricted-syntax": 0,
+		"no-use-before-define": 0,
 		"class-methods-use-this": 0,
 		"no-bitwise": 0,
 		"indent": [2, "tab"],
