@@ -10,7 +10,7 @@ class BinaryTree<T> {
 
 	constructor(compareFunction?: typeof baseCompareFunction<T>) {
 		this.root = null;
-		this.compareFunction = compareFunction || baseCompareFunction;
+		this.compareFunction = compareFunction ?? baseCompareFunction;
 	}
 
 	insert(value: T) {

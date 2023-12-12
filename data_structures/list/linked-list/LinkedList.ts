@@ -67,7 +67,7 @@ class LinkedList<T> {
 			}
 
 			previousNode = currentNode;
-			currentNode = currentNode!.next;
+			currentNode = currentNode.next;
 			currentPosition++;
 		}
 
@@ -161,7 +161,7 @@ class LinkedList<T> {
 		let currentNode = this.head;
 
 		while (currentNode.next) {
-			if (!currentNode.next!.next) {
+			if (!currentNode.next.next) {
 				currentNode.next = null;
 			} else {
 				currentNode = currentNode.next!;

@@ -17,9 +17,9 @@ class HashTable<Key extends KeyType, Value> {
 	size = 0;
 
 	constructor({ capacity, threshold, collisionResolution }: HashTableOptions = {}) {
-		this.collisionResolution = collisionResolution || 'linear';
-		this.threshold = threshold || 0.75;
-		this.capacity = capacity || 10;
+		this.collisionResolution = collisionResolution ?? 'linear';
+		this.threshold = threshold ?? 0.75;
+		this.capacity = capacity ?? 10;
 
 		this.buckets = new Array(this.capacity).fill(null);
 	}
