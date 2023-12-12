@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
-import HashTable from './HashTable'; // Путь к вашему файлу
+import HashTable from '../open-addressed/HashTable'; // Путь к вашему файлу
 
-import { operations, values, expected } from '../__test__/stub/stress_stub'; // Путь к вашему файлу
+import { operations, values, expected } from './stub/stress_stub'; // Путь к вашему файлу
 
 describe('Open Addressed HashTable', () => {
 	it('should add and retrieve a single key-value pair', () => {

@@ -1,5 +1,5 @@
 import LinkedList from '../../list/linked-list/LinkedList';
-import Queue from './Queue';
+import Queue from '../queue/Queue';
 
 let q: Queue<number>;
 

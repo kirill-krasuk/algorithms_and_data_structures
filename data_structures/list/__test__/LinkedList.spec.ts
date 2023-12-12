@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import LinkedList from './LinkedList';
+import LinkedList from '../linked-list/LinkedList';
 
 let linkedList: LinkedList<number>;
 
