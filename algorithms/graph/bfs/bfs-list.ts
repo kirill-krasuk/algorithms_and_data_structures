@@ -5,7 +5,7 @@ import Queue from '../../../data_structures/queue/queue/Queue';
  * O(n + m)
  */
 function BFSList(g: GraphList, start: number) {
-	if (!g[start]) {
+	if (!g?.[start]) {
 		return new Set();
 	}
 

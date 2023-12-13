@@ -20,11 +20,9 @@ function DFSList(g: GraphList, start: number) {
 
 		const neighborVertices = g[currentVertex];
 
-		if (neighborVertices) {
-			for (const neighborVertex of neighborVertices) {
-				if (!visited.has(neighborVertex)) {
-					stack.push(neighborVertex);
-				}
+		for (const neighborVertex of neighborVertices) {
+			if (!visited.has(neighborVertex)) {
+				stack.push(neighborVertex);
 			}
 		}
 	}
@@ -41,18 +39,13 @@ function DFSListRecursive(g: GraphList, start: number, visited = new Set()) {
 
 	const neighborVertices = g[start];
 
-	if (neighborVertices) {
-		for (const neighborVertex of neighborVertices) {
-			if (!visited.has(neighborVertex)) {
-				DFSListRecursive(g, neighborVertex, visited);
-			}
+	for (const neighborVertex of neighborVertices) {
+		if (!visited.has(neighborVertex)) {
+			DFSListRecursive(g, neighborVertex, visited);
 		}
 	}
 
 	return visited;
 }
 
-export {
-	DFSList,
-	DFSListRecursive,
-};
+export { DFSList, DFSListRecursive };
