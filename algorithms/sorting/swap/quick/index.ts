@@ -71,6 +71,10 @@ function quickSortHoara<T>(
 	left = 0,
 	right = arr.length - 1,
 ) {
+	if (arr.length <= 1) {
+		return arr;
+	}
+
 	if (left === right) {
 		return arr;
 	}

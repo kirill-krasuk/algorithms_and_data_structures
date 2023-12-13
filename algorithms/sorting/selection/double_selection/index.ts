@@ -22,6 +22,11 @@ function doubleSelectionSort<T>(
 			}
 		}
 
+		if (max === left) {
+			// Скорректируйте максимум, если он указывает на левый элемент, который должен быть заменён
+			max = min;
+		}
+
 		swap(arr, left, min);
 		swap(arr, right, max);
 
