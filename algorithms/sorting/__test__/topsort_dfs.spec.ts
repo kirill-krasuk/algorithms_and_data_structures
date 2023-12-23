@@ -1,5 +1,25 @@
 import topologicalSort, { Graph } from '../topological/dfs';
 
+/*
+	использовать для отладки вместе с расширением vscode debug visualizer
+
+	hedietDbgVis.createGraphFromPointers(
+		Object.keys(graph).map(key => ({ id: key, label: key })),
+
+		node => {
+			const targets = graph[node.id];
+
+			const edges = targets ? targets.map(target => ({ to: { id: target, label: target } })) : [];
+
+			return {
+				...node,
+				edges: edges
+			};
+		}
+	)
+
+*/
+
 describe('Topological sort', () => {
 	it('should return a sorted list of vertices in a directed acyclic graph', () => {
 		// Arrange

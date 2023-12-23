@@ -3,6 +3,20 @@ import LinkedList from '../linked-list/LinkedList';
 
 let linkedList: LinkedList<number>;
 
+/*
+	использовать для визуализации в vscode debug visualizer расширении
+
+	hedietDbgVis.createGraphFromPointers(
+		hedietDbgVis.tryEval([linkedList.head]),
+		n => ({
+			id: n.value,
+			color: "lightblue",
+			label: `${n.value}`,
+			edges: [{ to: n.next, label: "next" }].filter(i => !!i.to),
+		})
+	)
+*/
+
 describe('Linked List', () => {
 	beforeEach(() => {
 		linkedList = new LinkedList([1, 2, 3]);

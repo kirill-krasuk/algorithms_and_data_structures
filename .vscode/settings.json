@@ -6,10 +6,7 @@
 	"prettier.configPath": ".prettierrc",
 	"editor.formatOnSave": false,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.codeActionsOnSave": [
-		"source.fixAll.format",
-		"source.fixAll.eslint"
-	],
+	"editor.codeActionsOnSave": ["source.fixAll.format", "source.fixAll.eslint"],
 	"[typescript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	}
