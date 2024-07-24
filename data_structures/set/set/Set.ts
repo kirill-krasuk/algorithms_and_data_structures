@@ -1,23 +1,8 @@
-import LinkedList from '../list/linked-list/LinkedList';
+import LinkedList from '../../list/linked-list/LinkedList';
+import type { SetBase } from '../SetBase';
 
-class Set<T> {
-	private list!: LinkedList<T>;
-
-	constructor(list?: T[] | Set<T> | LinkedList<T>) {
-		if (list instanceof Set || list instanceof LinkedList) {
-			this.list = new LinkedList([...list.toArray()]);
-		}
-
-		if (Array.isArray(list)) {
-			this.list = new LinkedList(
-				list.filter((item, index) => list.indexOf(item) === index),
-			);
-		}
-
-		if (!list) {
-			this.list = new LinkedList();
-		}
-	}
+class Set<T> implements SetBase<T> {
+	private list = new LinkedList<T>();
 
 	add(value: T) {
 		if (!this.contains(value)) {
@@ -27,18 +12,24 @@ class Set<T> {
 		return this;
 	}
 
-	addSubset(value: T[] | Set<T>) {
-		if (value instanceof Set) {
-			value.toArray().forEach((item) => this.add(item));
+	addSubset(values: T[] | SetBase<T>) {
+		const addValueToSet = (value: T) => {
+			this.add(value);
+		};
+
+		if (values instanceof Set) {
+			values.toArray().forEach(addValueToSet);
 		}
 
-		if (Array.isArray(value)) {
-			value.forEach((item) => this.add(item));
+		if (Array.isArray(values)) {
+			values.forEach(addValueToSet);
 		}
 	}
 
 	remove(value: T) {
-		return this.list.remove(value);
+		const removed = this.list.remove(value);
+
+		return !!removed;
 	}
 
 	contains(value: T): boolean {
@@ -50,7 +41,7 @@ class Set<T> {
 	}
 
 	union(set: Set<T>) {
-		const result = new Set(this.list);
+		const result = Set.from(this.list);
 
 		set.toArray().forEach((value) => {
 			if (!result.contains(value)) {
@@ -74,7 +65,7 @@ class Set<T> {
 	}
 
 	difference(set: Set<T>) {
-		const result = new Set(this.list);
+		const result = Set.from(this.list);
 
 		set.toArray().forEach((value) => {
 			result.remove(value);
@@ -96,6 +87,24 @@ class Set<T> {
 
 	toString() {
 		return this.toArray().toString();
+	}
+
+	static from<From>(list: From[] | Set<From> | LinkedList<From>) {
+		const set = new Set<From>();
+
+		if (list instanceof LinkedList || list instanceof Set) {
+			for (const value of list.toArray()) {
+				set.add(value);
+			}
+		}
+
+		if (Array.isArray(list)) {
+			for (const value of list) {
+				set.add(value);
+			}
+		}
+
+		return set;
 	}
 }
 

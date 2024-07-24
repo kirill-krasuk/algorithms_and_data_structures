@@ -1,24 +1,28 @@
 import LinkedList from '../../list/linked-list/LinkedList';
 
 class Queue<T> {
-	private list!: LinkedList<T>;
+	private list = new LinkedList<T>();
 
-	constructor(list?: T[] | LinkedList<T>) {
+	static from<From>(list?: From[] | LinkedList<From>): Queue<From> {
+		const queue = new Queue<From>();
+
 		if (list instanceof LinkedList) {
-			this.list = new LinkedList([...list.toArray()]);
+			for (const value of list.toArray()) {
+				queue.enqueue(value);
+			}
 		}
 
 		if (Array.isArray(list)) {
-			this.list = new LinkedList([...list]);
+			for (const value of list) {
+				queue.enqueue(value);
+			}
 		}
 
-		if (!list) {
-			this.list = new LinkedList();
-		}
+		return queue;
 	}
 
 	isEmpty() {
-		return !this.list.count();
+		return !this.list.getLength();
 	}
 
 	peek() {
@@ -26,7 +30,7 @@ class Queue<T> {
 			return null;
 		}
 
-		return this.list.head?.value;
+		return this.list.getHead()?.value;
 	}
 
 	enqueue(value: T) {

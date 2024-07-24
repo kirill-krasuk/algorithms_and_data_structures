@@ -2,18 +2,21 @@
 import Node from './Node';
 
 class LinkedList<T> {
+	// for test
 	public head: Node<T> | null = null;
 	public tail: Node<T> | null = null;
 	private _count = 0;
 
-	constructor(array?: T[]) {
-		if (array) {
-			this.fromArray(array);
-		}
+	getLength() {
+		return this._count;
 	}
 
-	count() {
-		return this._count;
+	getHead() {
+		return this.head;
+	}
+
+	getTail() {
+		return this.tail;
 	}
 
 	append(value: T) {
@@ -48,77 +51,32 @@ class LinkedList<T> {
 	}
 
 	insertAt(value: T, toPosition = 0) {
-		let previousNode = null;
-		let currentNode = this.head;
-		let currentPosition = 0;
-
-		while (currentNode) {
-			if (currentPosition === toPosition) {
-				const newNode = new Node(value, currentNode);
-
-				if (previousNode) {
-					previousNode.next = newNode;
-				} else {
-					this.head = newNode;
-				}
-
-				this._count++;
-				return this;
-			}
-
-			previousNode = currentNode;
-			currentNode = currentNode.next;
-			currentPosition++;
+		if (toPosition === 0) {
+			this.prepend(value);
+			return this;
 		}
 
-		if (!currentNode) {
-			const newNode = new Node(value);
-
-			this._count++;
-
-			if (this.tail) {
-				this.tail.next = newNode;
-				this.tail = newNode;
-			} else {
-				this.head = newNode;
-				this.tail = newNode;
-			}
+		if (toPosition >= this._count) {
+			this.append(value);
+			return this;
 		}
+
+		this.insertAtPosition(this.head, new Node(value), toPosition);
+		this._count++;
 
 		return this;
 	}
 
-	remove(value: T) {
-		let previousNode = null;
-		let currentNode = this.head;
-
-		while (currentNode) {
-			if (currentNode.value === value) {
-				const removedNode = currentNode;
-
-				if (previousNode) {
-					previousNode.next = currentNode.next;
-
-					if (!currentNode.next) {
-						this.tail = previousNode;
-					}
-				} else {
-					this.head = this.head!.next;
-
-					if (!this.head) {
-						this.tail = null;
-					}
-				}
-
-				this._count--;
-				return removedNode;
-			}
-
-			previousNode = currentNode;
-			currentNode = currentNode.next;
+	remove(value: T): Node<T> | null {
+		if (this.head && this.head.value === value) {
+			return this.removeHead();
 		}
 
-		return false;
+		if (this.tail && this.tail.value === value) {
+			return this.removeTail();
+		}
+
+		return this.removeNode(value);
 	}
 
 	removeHead() {
@@ -176,9 +134,7 @@ class LinkedList<T> {
 	find(value: (v: T) => boolean): Node<T> | null;
 	find(value: T): Node<T> | null;
 	find(value: any): Node<T> | null {
-		let currentNode = this.head;
-
-		while (currentNode) {
+		for (let currentNode = this.head; currentNode; currentNode = currentNode.next) {
 			if (typeof value === 'function') {
 				if (value(currentNode.value)) {
 					return currentNode;
@@ -188,22 +144,16 @@ class LinkedList<T> {
 			if (value === currentNode.value) {
 				return currentNode;
 			}
-
-			currentNode = currentNode.next;
 		}
 
 		return null;
 	}
 
 	contains(value: T) {
-		let currentNode = this.head;
-
-		while (currentNode) {
+		for (let currentNode = this.head; currentNode; currentNode = currentNode.next) {
 			if (currentNode.value === value) {
 				return true;
 			}
-
-			currentNode = currentNode.next;
 		}
 
 		return false;
@@ -233,15 +183,15 @@ class LinkedList<T> {
 		});
 	}
 
+	isEmpty() {
+		return this._count === 0;
+	}
+
 	toArray() {
 		const arr = [];
 
-		let currentNode = this.head;
-
-		while (currentNode) {
+		for (let currentNode = this.head; currentNode; currentNode = currentNode.next) {
 			arr.push(currentNode.value);
-
-			currentNode = currentNode.next;
 		}
 
 		return arr;
@@ -258,12 +208,72 @@ class LinkedList<T> {
 	}
 
 	* [Symbol.iterator]() {
-		let currentNode = this.head;
-
-		while (currentNode) {
+		for (let currentNode = this.head; currentNode; currentNode = currentNode.next) {
 			yield currentNode.value;
-			currentNode = currentNode.next;
 		}
+	}
+
+	private insertAtPosition(
+		currentNode: Node<T> | null,
+		newNode: Node<T>,
+		toPosition: number,
+	): void {
+		let previousNode = null;
+
+		for (
+			let currentPosition = 0;
+			currentNode;
+			currentNode = currentNode.next, currentPosition++
+		) {
+			if (currentPosition === toPosition) {
+				newNode.next = currentNode;
+
+				if (previousNode) {
+					previousNode.next = newNode;
+				} else {
+					this.head = newNode;
+				}
+
+				return;
+			}
+
+			previousNode = currentNode;
+		}
+	}
+
+	private removeNode(value: T): Node<T> | null {
+		let previousNode: Node<T> | null = null;
+
+		for (let currentNode = this.head; currentNode; currentNode = currentNode.next) {
+			if (currentNode.value === value) {
+				const removedNode = currentNode;
+
+				if (previousNode) {
+					previousNode.next = currentNode.next;
+
+					if (!currentNode.next) {
+						this.tail = previousNode;
+					}
+				}
+
+				this._count--;
+				return removedNode;
+			}
+
+			previousNode = currentNode;
+		}
+
+		return null;
+	}
+
+	static from<From>(array: From[]) {
+		const list = new LinkedList<From>();
+
+		array.forEach((value) => {
+			list.append(value);
+		});
+
+		return list;
 	}
 }
 

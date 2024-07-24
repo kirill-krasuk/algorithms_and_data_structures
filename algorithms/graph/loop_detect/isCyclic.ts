@@ -1,5 +1,6 @@
 function isCyclic(graph: Map<number, number[]>): boolean {
 	const visited = new Set<number>();
+	// Use a set to keep track of the nodes in the current recursion stack.
 	const recStack = new Set<number>();
 
 	for (const node of graph.keys()) {

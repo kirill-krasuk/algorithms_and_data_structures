@@ -1,7 +1,11 @@
 import TreeNode from './TreeNode';
 
 function baseCompareFunction<T>(a: T, b: T) {
-	return a <= b;
+	if (typeof a === 'string' && typeof b === 'string') {
+		return a.localeCompare(b);
+	}
+
+	return (a as number) - (b as number);
 }
 
 class BinaryTree<T> {
@@ -14,69 +18,54 @@ class BinaryTree<T> {
 	}
 
 	insert(value: T) {
-		if (this.root === null) {
-			this.root = new TreeNode(value);
-			return;
-		}
-
-		let current = this.root;
-
-		while (current !== null) {
-			if (this.compareFunction(value, current.value)) {
-				if (current.left === null) {
-					current.left = new TreeNode(value);
-					return;
-				}
-
-				current = current.left;
-			} else {
-				if (current.right === null) {
-					current.right = new TreeNode(value);
-					return;
-				}
-
-				current = current.right;
+		const insertInto = (node: TreeNode<T> | null, v: T): TreeNode<T> => {
+			if (node === null) {
+				return new TreeNode(v);
 			}
-		}
+
+			if (this.compareFunction(v, node.value) <= 0) {
+				node.left = insertInto(node.left, v);
+			} else {
+				node.right = insertInto(node.right, v);
+			}
+
+			return node;
+		};
+
+		this.root = insertInto(this.root, value);
 	}
 
-	find(value: T) {
-		let current = this.root;
-
-		while (current !== null) {
-			if (current.value === value) {
-				return current;
-			}
-
-			if (this.compareFunction(value, current.value)) {
-				current = current.left;
-			} else {
-				current = current.right;
-			}
+	find(value: T, node: TreeNode<T> | null = this.root): TreeNode<T> | null {
+		if (node === null) {
+			return null;
 		}
 
-		return null;
+		if (node.value === value) {
+			return node;
+		}
+
+		return this.compareFunction(value, node.value) <= 0
+			? this.find(value, node.left)
+			: this.find(value, node.right);
 	}
 
 	remove(value: T) {
-		function findMinNode(root: TreeNode<T>) {
-			let current = root;
-
-			while (current.left !== null) {
-				current = current.left;
+		function findMinNode(root: TreeNode<T> | null): TreeNode<T> | null {
+			if (root === null || root.left === null) {
+				return root;
 			}
 
-			return current;
+			return findMinNode(root.left);
 		}
 
-		function removeRecursive(root: TreeNode<T> | null, v: T) {
+		const removeRecursive = (root: TreeNode<T> | null, v: T) => {
 			if (root === null) {
 				return null;
 			}
 
-			if (v < root.value) {
+			if (this.compareFunction(v, root.value) < 0) {
 				root.left = removeRecursive(root.left, v);
-			} else if (v > root.value) {
+			} else if (this.compareFunction(v, root.value) > 0) {
 				root.right = removeRecursive(root.right, v);
 			} else {
 				if (root.left === null) {
@@ -89,16 +78,22 @@ class BinaryTree<T> {
 
 				const minNode = findMinNode(root.right);
 
-				root.value = minNode.value;
-				root.right = removeRecursive(root.right, minNode.value);
+				if (minNode !== null) {
+					root.value = minNode.value;
+					root.right = removeRecursive(root.right, minNode.value);
+				}
 			}
 
 			return root;
-		}
+		};
 
 		this.root = removeRecursive(this.root, value);
 
 		return this;
+	}
+
+	contains(value: T) {
+		return this.find(value) !== null;
 	}
 
 	inOrderTraversal(callback: (value: T) => void) {

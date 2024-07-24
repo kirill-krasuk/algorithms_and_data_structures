@@ -3,25 +3,12 @@ import LinkedList from '../doubly-linked-list/DoublyLinkedList';
 
 let linkedList: LinkedList<number>;
 
-// function expectLinksCorrect<T>(list: LinkedList<T>, values: T[]) {
-// 	expect(list.head?.prev).toBeNull();
-// 	expect(list.tail?.next).toBeNull();
-
-// 	for (let i = 0; i < values.length; i++) {
-// 		expect(list.getAt(i)?.value).toBe(values[i]);
-// 	}
-
-// 	if (values.length > 0) {
-// 		expect(list.tail?.value).toBe(values[values.length - 1]);
-// 	}
-// }
-
 describe('DoublyLinkedList', () => {
 	beforeEach(() => {
-		linkedList = new LinkedList<number>([1, 2, 3]);
+		linkedList = LinkedList.from([1, 2, 3]);
 	});
 
-	it('should nodes have links to null if add one item', () => {
+	it('should set node links to null when adding one item', () => {
 		const lList = new LinkedList<number>();
 
 		lList.append(1);
@@ -38,7 +25,7 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(1);
 	});
 
-	it('should nodes have links', () => {
+	it('should link nodes correctly', () => {
 		const lList = new LinkedList<number>();
 
 		lList.append(1).append(2).append(3);
@@ -57,7 +44,7 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(3);
 	});
 
-	it('should prepend value into empty list', () => {
+	it('should prepend a value into an empty list', () => {
 		const lList = new LinkedList<number>();
 
 		lList.prepend(1);
@@ -74,7 +61,7 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(1);
 	});
 
-	it('should prepend values into empty list', () => {
+	it('should prepend values to an empty list', () => {
 		const lList = new LinkedList<number>();
 
 		lList.prepend(1).prepend(2).prepend(3);
@@ -91,7 +78,7 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(3);
 	});
 
-	it('should prepend value', () => {
+	it('should prepend a value to the list', () => {
 		linkedList.prepend(0);
 
 		expect(linkedList.head?.next?.value).toBe(1);
@@ -104,7 +91,7 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.count()).toBe(4);
 	});
 
-	it('should remove value from start of list', () => {
+	it('should remove a value from the start of the list', () => {
 		expect(linkedList.removeHead()?.value).toBe(1);
 
 		expect(linkedList.head?.prev).toBeNull();
@@ -114,7 +101,7 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.count()).toBe(2);
 	});
 
-	it('should remove value from empty list', () => {
+	it('should not remove a value from an empty list', () => {
 		const lList = new LinkedList();
 
 		expect(lList.removeHead()).toBeNull();
@@ -127,8 +114,8 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(0);
 	});
 
-	it('should remove a single value from list', () => {
-		const lList = new LinkedList([1]);
+	it('should remove a single value from the list', () => {
+		const lList = LinkedList.from([1]);
 
 		expect(lList.removeHead()?.value).toBe(1);
 
@@ -140,7 +127,7 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(0);
 	});
 
-	it('should remove value from end of list', () => {
+	it('should remove a value from the end of the list', () => {
 		expect(linkedList.removeTail()?.value).toBe(3);
 
 		expect(linkedList.head?.prev).toBeNull();
@@ -150,7 +137,7 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.count()).toBe(2);
 	});
 
-	it('should remove value from end of list', () => {
+	it('should remove a value from the end of the list', () => {
 		const lList = new LinkedList();
 
 		expect(lList.removeTail()).toBeNull();
@@ -163,8 +150,8 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(0);
 	});
 
-	it('should remove a single value from list', () => {
-		const lList = new LinkedList([1]);
+	it('should remove a single value from the list', () => {
+		const lList = LinkedList.from([1]);
 
 		expect(lList.removeTail()?.value).toBe(1);
 
@@ -176,7 +163,7 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(0);
 	});
 
-	it('should remove desired element', () => {
+	it('should remove the specified element from the list', () => {
 		linkedList.remove(2);
 		linkedList.remove(4);
 
@@ -184,14 +171,14 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.toArray()).toEqual([1, 3]);
 	});
 
-	it('should remove correctly last element', () => {
+	it('should remove elements from the list correctly', () => {
 		linkedList.remove(3);
 
 		expect(linkedList.count()).toBe(2);
 		expect(linkedList.toArray()).toEqual([1, 2]);
 	});
 
-	it('should remove all elements correctly', () => {
+	it('should remove all elements from the list correctly', () => {
 		linkedList.remove(1);
 		linkedList.remove(2);
 		linkedList.remove(3);
@@ -200,17 +187,17 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.toArray()).toEqual([]);
 	});
 
-	it('should contains value in list', () => {
+	it('should contain the value in the list', () => {
 		expect(linkedList.contains(2)).toBeTruthy();
 		expect(linkedList.contains(4)).toBeFalsy();
 	});
 
-	it('should return value if find him', () => {
+	it('should return the value if found', () => {
 		const obj1 = { name: 'John' };
 		const obj2 = { name: 'Jack' };
 		const obj3 = { name: 'Jin' };
 
-		const linkedListObjectBased = new LinkedList([obj1, obj2]);
+		const linkedListObjectBased = LinkedList.from([obj1, obj2]);
 
 		expect(linkedListObjectBased.find(obj3)).toBeNull();
 		expect(linkedListObjectBased.find(({ name }) => name === 'John')!.value).toBe(
@@ -219,7 +206,7 @@ describe('DoublyLinkedList', () => {
 		expect(linkedListObjectBased.find(obj2)!.value).toBe(obj2);
 	});
 
-	it('should insert value at position into list', () => {
+	it('should insert a value at a specific position in the list', () => {
 		linkedList.insertAt(10, 2);
 
 		expect(linkedList.toArray()).toEqual([1, 2, 10, 3]);
@@ -237,7 +224,7 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.count()).toBe(4);
 	});
 
-	it('should insert value at first position into list', () => {
+	it('should insert a value at the first position in the list', () => {
 		linkedList.insertAt(10, 0);
 
 		expect(linkedList.toArray()).toEqual([10, 1, 2, 3]);
@@ -255,7 +242,7 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.count()).toBe(4);
 	});
 
-	it('should insert value at last position into list', () => {
+	it('should insert a value at the last position in the list', () => {
 		linkedList.insertAt(10, 10);
 
 		expect(linkedList.toArray()).toEqual([1, 2, 3, 10]);
@@ -273,7 +260,7 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.count()).toBe(4);
 	});
 
-	it('should insert value at last position into empty list', () => {
+	it('should insert a value at the last position in an empty list', () => {
 		const lList = new LinkedList<number>();
 
 		lList.insertAt(10, 10);
@@ -281,14 +268,13 @@ describe('DoublyLinkedList', () => {
 		expect(lList.toArray()).toEqual([10]);
 
 		expect(lList.head?.value).toBe(10);
-
 		expect(lList.tail?.value).toBe(10);
 
 		expect(lList.count()).toBe(1);
 	});
 
-	it('should insert value at last position into list with one item', () => {
-		const lList = new LinkedList<number>([2]);
+	it('should insert a value at the last position in a list with one item', () => {
+		const lList = LinkedList.from([2]);
 
 		lList.insertAt(10, 10);
 
@@ -303,8 +289,8 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(2);
 	});
 
-	it('should insert value at first position into list with one item', () => {
-		const lList = new LinkedList<number>([2]);
+	it('should insert a value at the first position in a list with one item', () => {
+		const lList = LinkedList.from([2]);
 
 		lList.insertAt(10, 0);
 
@@ -319,8 +305,8 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(2);
 	});
 
-	it('should generate correct list based on array', () => {
-		const lList = new LinkedList([1, 2, 3]);
+	it('should generate the correct list based on the array', () => {
+		const lList = LinkedList.from([1, 2, 3]);
 
 		expect(lList.head?.next?.next).toBe(lList.tail);
 		expect(lList.head?.prev).toBeNull();
@@ -334,7 +320,7 @@ describe('DoublyLinkedList', () => {
 		expect(lList.count()).toBe(3);
 	});
 
-	it('should reverse linkedList', () => {
+	it('should reverse the linked list', () => {
 		linkedList.reverse();
 
 		expect(linkedList.head?.prev).toBeNull();
@@ -353,11 +339,11 @@ describe('DoublyLinkedList', () => {
 		expect(linkedList.toArray()).toEqual([3, 2, 1]);
 	});
 
-	it('should generate correct array', () => {
+	it('should generate the correct array', () => {
 		expect(linkedList.toArray()).toEqual([1, 2, 3]);
 	});
 
-	it('should correctly worked iterator', () => {
+	it('should correctly work with the iterator', () => {
 		/**
 		 * values like in linkedList in beforeEach section
 		 */
@@ -373,7 +359,7 @@ describe('DoublyLinkedList', () => {
 		}
 	});
 
-	it('should linkedList empty after call clear()', () => {
+	it('should make the linked list empty after calling clear()', () => {
 		linkedList.clear();
 
 		expect(linkedList.count()).toBe(0);

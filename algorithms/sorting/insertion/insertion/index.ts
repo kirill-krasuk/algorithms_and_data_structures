@@ -17,10 +17,10 @@ function insertionSort<T>(
 			lastSortedIndex--;
 			isSorted = false;
 		}
-	}
 
-	if (isSorted) {
-		return arr;
+		if (isSorted) {
+			continue;
+		}
 	}
 
 	return arr;

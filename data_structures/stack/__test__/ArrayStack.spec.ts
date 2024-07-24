@@ -1,14 +1,14 @@
-import LinkedList from '../list/linked-list/LinkedList';
-import Stack from './Stack';
+import ArrayStack from '../array-stack/ArrayStack';
 
-describe('Stack', () => {
+describe('ArrayStack', () => {
 	it('should work fine with array constructor', () => {
-		const stack = new Stack([1, 2, 3]);
+		const stack = ArrayStack.from([1, 2, 3], 3);
+
 		expect(stack.toArray()).toEqual([1, 2, 3]);
 	});
 
 	it('should push and pop elements from the stack', () => {
-		const stack = new Stack<number>();
+		const stack = new ArrayStack<number>();
 
 		stack.push(1);
 		stack.push(2);
@@ -21,7 +21,7 @@ describe('Stack', () => {
 	});
 
 	it('should return correct value when checking if the stack is empty', () => {
-		const stack = new Stack<number>();
+		const stack = new ArrayStack<number>();
 
 		expect(stack.isEmpty()).toBe(true);
 
@@ -35,7 +35,7 @@ describe('Stack', () => {
 	});
 
 	it('should return correct value when peeking at the top of the stack', () => {
-		const stack = new Stack<number>();
+		const stack = new ArrayStack<number>();
 
 		expect(stack.peek()).toBeNull();
 
@@ -51,28 +51,14 @@ describe('Stack', () => {
 	});
 
 	it('should return null when popping from an empty stack', () => {
-		const stack = new Stack<number>();
+		const stack = new ArrayStack<number>();
 
 		expect(stack.pop()).toBeNull();
 	});
 
 	it('should return null when peeking at the top of an empty stack', () => {
-		const stack = new Stack<number>();
+		const stack = new ArrayStack<number>();
 
 		expect(stack.peek()).toBeNull();
-	});
-
-	it('should create a stack with a linked list argument', () => {
-		const linkedList = new LinkedList<number>();
-		linkedList.append(1);
-		linkedList.append(2);
-		linkedList.append(3);
-
-		const stack = new Stack(linkedList);
-
-		expect(stack.pop()).toBe(3);
-		expect(stack.pop()).toBe(2);
-		expect(stack.pop()).toBe(1);
-		expect(stack.pop()).toBeNull();
 	});
 });

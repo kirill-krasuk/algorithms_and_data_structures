@@ -1,15 +1,11 @@
+/* eslint-disable no-multi-assign */
 import Node from './Node';
 
 class DoublyLinkedList<T> {
+	// for tests
 	public head: Node<T> | null = null;
 	public tail: Node<T> | null = null;
 	private _count = 0;
-
-	constructor(array?: T[]) {
-		if (array) {
-			this.fromArray(array);
-		}
-	}
 
 	count() {
 		return this._count;
@@ -17,122 +13,63 @@ class DoublyLinkedList<T> {
 
 	append(value: T) {
 		const newNode = new Node(value);
-		this._count++;
 
 		if (!this.head) {
-			this.head = newNode;
+			this.head = this.tail = newNode;
+		} else {
+			if (this.tail) {
+				this.tail.next = newNode;
+			}
+			newNode.prev = this.tail;
 			this.tail = newNode;
-
-			return this;
 		}
 
-		newNode.prev = this.tail;
-		this.tail!.next = newNode;
-		this.tail = newNode;
-
+		this._count++;
 		return this;
 	}
 
 	prepend(value: T) {
 		const newNode = new Node(value, null, this.head);
-		this._count++;
 
 		if (this.head) {
 			this.head.prev = newNode;
+		} else {
+			this.tail = newNode;
 		}
 
 		this.head = newNode;
-
-		if (!this.tail) {
-			this.tail = newNode;
-		}
+		this._count++;
 
 		return this;
 	}
 
 	insertAt(value: T, toPosition = 0) {
-		let previousNode: Node<T> | null = null;
-		let currentNode = this.head;
-		let currentPosition = 0;
-
-		while (currentNode) {
-			if (currentPosition === toPosition) {
-				const newNode = new Node(value, previousNode, currentNode);
-
-				this._count++;
-
-				if (previousNode) {
-					previousNode.next = newNode;
-					currentNode.prev = newNode;
-				} else {
-					if (this.head) {
-						this.head.prev = newNode;
-					}
-
-					this.head = newNode;
-				}
-
-				return this;
-			}
-
-			previousNode = currentNode;
-			currentNode = currentNode.next;
-			currentPosition++;
-		}
-
-		if (!currentNode) {
-			const newNode = new Node(value, previousNode, null);
-			this._count++;
-
-			if (!this.head) {
-				this.head = newNode;
-				this.tail = newNode;
-
-				return this;
-			}
-
-			if (this.tail) {
-				this.tail.next = newNode;
-				this.tail = newNode;
-
-				return this;
-			}
-
+		if (toPosition === 0) {
+			this.prepend(value);
 			return this;
 		}
+
+		if (toPosition >= this._count) {
+			this.append(value);
+			return this;
+		}
+
+		this.insertAtPosition(this.head, new Node(value), toPosition);
+		this._count++;
 
 		return this;
 	}
 
 	remove(value: T) {
-		let previousNode = null;
-		let currentNode = this.head;
-
-		while (currentNode) {
-			if (currentNode.value === value) {
-				const removedNode = currentNode;
-
-				if (previousNode) {
-					previousNode.next = currentNode.next;
-				} else {
-					this.head = currentNode.next;
-				}
-
-				if (currentNode.next) {
-					currentNode.next.prev = previousNode;
-				} else {
-					this.tail = previousNode;
-				}
-
-				this._count--;
-				return removedNode;
-			}
-
-			previousNode = currentNode;
-			currentNode = currentNode.next;
+		if (this.head && this.head.value === value) {
+			return this.removeHead();
 		}
 
-		return false;
+		if (this.tail && this.tail.value === value) {
+			return this.removeTail();
+		}
+
+		return this.removeNode(value);
 	}
 
 	removeHead() {
@@ -157,22 +94,17 @@ class DoublyLinkedList<T> {
 	}
 
 	removeTail() {
-		if (!this.head) {
-			return null;
-		}
+		if (!this.tail) return null;
 
 		const removedNode = this.tail;
 		this._count--;
 
-		if (this.tail && !this.tail.prev) {
-			this.tail = null;
-			this.head = null;
-
-			return removedNode;
+		if (this.tail.prev) {
+			this.tail = this.tail.prev;
+			this.tail.next = null;
+		} else {
+			this.head = this.tail = null;
 		}
-
-		this.tail = this.tail!.prev;
-		this.tail!.next = null;
 
 		return removedNode;
 	}
@@ -200,45 +132,23 @@ class DoublyLinkedList<T> {
 	}
 
 	contains(value: T) {
-		let currentNode = this.head;
-
-		while (currentNode) {
-			if (value === currentNode.value) {
-				return true;
-			}
-
-			currentNode = currentNode.next;
+		for (let currentNode = this.head; currentNode; currentNode = currentNode.next) {
+			if (currentNode.value === value) return true;
 		}
 
 		return false;
 	}
 
 	reverse() {
-		let previousNode = null;
-		let nextNode = null;
 		let currentNode = this.head;
+		[this.head, this.tail] = [this.tail, this.head];
 
 		while (currentNode) {
-			nextNode = currentNode.next;
-			previousNode = currentNode.prev;
-
-			currentNode.next = previousNode;
-			currentNode.prev = nextNode;
-
-			currentNode = nextNode;
+			[currentNode.next, currentNode.prev] = [currentNode.prev, currentNode.next];
+			currentNode = currentNode.prev;
 		}
 
-		const tempLink = this.head;
-		this.head = this.tail;
-		this.tail = tempLink;
-
 		return this;
-	}
-
-	fromArray(array: T[]) {
-		array.forEach((item) => {
-			this.append(item);
-		});
 	}
 
 	clear() {
@@ -250,12 +160,8 @@ class DoublyLinkedList<T> {
 	toArray() {
 		const arr = [];
 
-		let currentNode = this.head;
-
-		while (currentNode) {
+		for (let currentNode = this.head; currentNode; currentNode = currentNode.next) {
 			arr.push(currentNode.value);
-
-			currentNode = currentNode.next;
 		}
 
 		return arr;
@@ -272,6 +178,70 @@ class DoublyLinkedList<T> {
 			yield currentNode.value;
 			currentNode = currentNode.next;
 		}
+	}
+
+	private insertAtPosition(
+		currentNode: Node<T> | null,
+		newNode: Node<T>,
+		toPosition: number,
+	): void {
+		let currentPosition = 0;
+
+		while (currentNode && currentPosition < toPosition) {
+			if (currentPosition + 1 === toPosition || !currentNode.next) {
+				newNode.prev = currentNode;
+				newNode.next = currentNode.next;
+
+				if (currentNode.next) {
+					currentNode.next.prev = newNode;
+				} else {
+					this.tail = newNode;
+				}
+
+				currentNode.next = newNode;
+				break;
+			}
+
+			currentNode = currentNode.next;
+			currentPosition++;
+		}
+	}
+
+	private removeNode(value: T) {
+		for (
+			let currentNode = this.head;
+			currentNode;
+			currentNode = currentNode?.next ?? null
+		) {
+			if (currentNode.value !== value) continue;
+
+			if (currentNode.prev) {
+				currentNode.prev.next = currentNode.next;
+			} else {
+				this.head = currentNode.next;
+			}
+
+			if (currentNode.next) {
+				currentNode.next.prev = currentNode.prev;
+			} else {
+				this.tail = currentNode.prev;
+			}
+
+			this._count--;
+			return currentNode;
+		}
+
+		return null;
+	}
+
+	static from<From>(array: From[]) {
+		const list = new DoublyLinkedList<From>();
+
+		array.forEach((value) => {
+			list.append(value);
+		});
+
+		return list;
 	}
 }
 

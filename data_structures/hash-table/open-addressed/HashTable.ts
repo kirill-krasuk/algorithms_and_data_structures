@@ -1,6 +1,6 @@
 import djb2 from '../../../algorithms/hash/djb2';
 
-type KeyType = number | string;
+export type KeyType = number | string;
 type Bucket<K extends KeyType, V> = { key: K; value: V } | null;
 type CollisionResolution = 'linear' | 'quadratic' | 'double hashing';
 export type HashTableOptions = {
@@ -39,6 +39,18 @@ class HashTable<Key extends KeyType, Value> {
 
 	has(key: Key) {
 		return this.findBucket(key) !== null;
+	}
+
+	keys() {
+		return this.buckets
+			.filter((bucket) => bucket !== null)
+			.map((bucket) => bucket?.key as Key);
+	}
+
+	values() {
+		return this.buckets
+			.filter((bucket) => bucket !== null)
+			.map((bucket) => bucket?.value as Value);
 	}
 
 	remove(key: Key) {

@@ -1,19 +1,20 @@
-class CircularQueue {
-	queue: number[];
-	head = 0;
-	size = 0;
-	capacity: number;
+class CircularQueue<T> {
+	// for test
+	public _array: T[];
+	public _capacity: number;
+	private head = 0;
+	private size = 0;
 
-	constructor(k: number) {
-		this.queue = new Array<number>(k);
-		this.capacity = k;
+	constructor(bufferSize: number) {
+		this._array = new Array<T>(bufferSize);
+		this._capacity = bufferSize;
 	}
 
-	enqueue(value: number): boolean {
+	enqueue(value: T): boolean {
 		if (this.isFull()) return false;
 
-		const tail = (this.head + this.size) % this.capacity;
-		this.queue[tail] = value;
+		const tail = (this.head + this.size) % this._capacity;
+		this._array[tail] = value;
 		this.size++;
 
 		return true;
@@ -22,24 +23,27 @@ class CircularQueue {
 	dequeue(): boolean {
 		if (this.isEmpty()) return false;
 
-		this.head = (this.head + 1) % this.capacity;
+		// it's not necessary to remove the element from the array
+		// just for test
+		this._array[this.head] = undefined as unknown as T;
+		this.head = (this.head + 1) % this._capacity;
 		this.size--;
 
 		return true;
 	}
 
-	front(): number {
-		if (this.isEmpty()) return -1;
+	front(): T | null {
+		if (this.isEmpty()) return null;
 
-		return this.queue[this.head];
+		return this._array[this.head];
 	}
 
-	rear(): number {
-		if (this.isEmpty()) return -1;
+	rear(): T | null {
+		if (this.isEmpty()) return null;
 
-		const tail = (this.head + this.size - 1) % this.capacity;
+		const tail = (this.head + this.size - 1) % this._capacity;
 
-		return this.queue[tail];
+		return this._array[tail];
 	}
 
 	isEmpty(): boolean {
@@ -47,7 +51,7 @@ class CircularQueue {
 	}
 
 	isFull(): boolean {
-		return this.size === this.capacity;
+		return this.size === this._capacity;
 	}
 }
 

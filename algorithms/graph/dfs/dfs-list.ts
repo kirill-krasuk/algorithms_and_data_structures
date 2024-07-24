@@ -1,5 +1,5 @@
 import { GraphList } from '../../../data_structures/graphs/types';
-import Stack from '../../../data_structures/stack/Stack';
+import Stack from '../../../data_structures/stack/stack/Stack';
 
 /**
  * O(n + m)

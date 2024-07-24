@@ -1,21 +1,21 @@
 import LinkedList from '../../list/linked-list/LinkedList';
 import Queue from '../queue/Queue';
 
-let q: Queue<number>;
-
 describe('Queue', () => {
+	let q: Queue<number>;
+
 	beforeEach(() => {
-		q = new Queue([1, 2]);
+		q = Queue.from([1, 2]);
 	});
 
 	it('should work fine with array constructor', () => {
-		const queue = new Queue([1, 2, 3]);
+		const queue = Queue.from([1, 2, 3]);
 		expect(queue.toArray()).toEqual([1, 2, 3]);
 	});
 
 	it('should work fine with linked list constructor', () => {
-		const linkedList = new LinkedList([1, 2, 3]);
-		const queue = new Queue(linkedList);
+		const linkedList = LinkedList.from([1, 2, 3]);
+		const queue = Queue.from(linkedList);
 		expect(queue.toArray()).toEqual([1, 2, 3]);
 	});
 
@@ -41,7 +41,7 @@ describe('Queue', () => {
 	});
 
 	it('should remove value from start', () => {
-		const queue = new Queue([1, 2, 3]);
+		const queue = Queue.from([1, 2, 3]);
 
 		expect(queue.dequeue()).toBe(1);
 		expect(queue.toArray()).toEqual([2, 3]);
