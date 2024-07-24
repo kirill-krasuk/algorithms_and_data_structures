@@ -40,7 +40,7 @@ class BitVector {
 	 *    Это быстрее, чем обычное деление, и дает тот же результат, что и Math.floor(bit / 32).
 	 */
 	private getBitRow(bit: number) {
-		return bit >> 5;
+		return bit >> Math.log2(INT_SIZE); // log2(32) = 5
 	}
 
 	/**
