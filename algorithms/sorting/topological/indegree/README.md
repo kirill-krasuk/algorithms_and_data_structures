@@ -1,6 +1,6 @@
-# Topological sort by indegree
+# Topological sort by indegree (Kahn)
 
-Алгоритм работает следующим образом метод Indegree:
+Алгоритм (так же известный как алгоритм Каа) работает следующим образом метод Indegree:
 
 <img src="./topsort_indegree.gif" alt="topsort">
 
