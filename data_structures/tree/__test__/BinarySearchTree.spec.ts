@@ -60,7 +60,7 @@ describe('BinarySearchTree', () => {
 		bst.insert(3);
 		bst.insert(7);
 
-		const { root } = bst;
+		const root = bst.getRoot();
 		expect(root!.value).toBe(10);
 		expect(root!.left!.value).toBe(5);
 		expect(root!.right!.value).toBe(15);
@@ -77,7 +77,7 @@ describe('BinarySearchTree', () => {
 
 		bst.remove(5);
 
-		const { root } = bst;
+		const root = bst.getRoot();
 		expect(root!.value).toBe(10);
 		expect(root!.left!.value).toBe(7);
 		expect(root!.left!.left!.value).toBe(3);
@@ -90,7 +90,7 @@ describe('BinarySearchTree', () => {
 
 		bst.remove(20);
 
-		const { root } = bst;
+		const root = bst.getRoot();
 		expect(root!.value).toBe(30);
 	});
 
@@ -133,7 +133,7 @@ describe('BinarySearchTree', () => {
 
 		bst.remove(nodes[1]);
 
-		const { root } = bst;
+		const root = bst.getRoot();
 
 		expect(root!.value).toEqual(nodes[0]);
 		// node 13 was moved to the root

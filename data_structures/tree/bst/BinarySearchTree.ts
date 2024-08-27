@@ -9,7 +9,7 @@ function baseCompareFunction<T>(a: T, b: T) {
 }
 
 class BinaryTree<T> {
-	root: TreeNode<T> | null;
+	protected root: TreeNode<T> | null;
 	compareFunction: typeof baseCompareFunction<T>;
 
 	constructor(compareFunction?: typeof baseCompareFunction<T>) {
@@ -17,22 +17,14 @@ class BinaryTree<T> {
 		this.compareFunction = compareFunction ?? baseCompareFunction;
 	}
 
+	getRoot() {
+		return this.root;
+	}
+
 	insert(value: T) {
-		const insertInto = (node: TreeNode<T> | null, v: T): TreeNode<T> => {
-			if (node === null) {
-				return new TreeNode(v);
-			}
+		this.root = this.insertRecursive(this.root, value);
 
-			if (this.compareFunction(v, node.value) <= 0) {
-				node.left = insertInto(node.left, v);
-			} else {
-				node.right = insertInto(node.right, v);
-			}
-
-			return node;
-		};
-
-		this.root = insertInto(this.root, value);
+		return this;
 	}
 
 	find(value: T, node: TreeNode<T> | null = this.root): TreeNode<T> | null {
@@ -50,52 +42,43 @@ class BinaryTree<T> {
 	}
 
 	remove(value: T) {
-		function findMinNode(root: TreeNode<T> | null): TreeNode<T> | null {
-			if (root === null || root.left === null) {
-				return root;
-			}
-
-			return findMinNode(root.left);
-		}
-
-		const removeRecursive = (root: TreeNode<T> | null, v: T) => {
-			if (root === null) {
-				return null;
-			}
-
-			if (this.compareFunction(v, root.value) < 0) {
-				root.left = removeRecursive(root.left, v);
-			} else if (this.compareFunction(v, root.value) > 0) {
-				root.right = removeRecursive(root.right, v);
-			} else {
-				if (root.left === null) {
-					return root.right;
-				}
-
-				if (root.right === null) {
-					return root.left;
-				}
-
-				const minNode = findMinNode(root.right);
-
-				if (minNode !== null) {
-					root.value = minNode.value;
-					root.right = removeRecursive(root.right, minNode.value);
-				}
-			}
-
-			return root;
-		};
-
-		this.root = removeRecursive(this.root, value);
+		this.root = this.removeRecursive(this.root, value);
 
 		return this;
+	}
+
+	getMaxNode(node: TreeNode<T> | null = this.root): TreeNode<T> | null {
+		if (node === null) {
+			return null;
+		}
+
+		return node.right ? this.getMaxNode(node.right) : node;
+	}
+
+	getMinNode(node: TreeNode<T> | null = this.root): TreeNode<T> | null {
+		if (node === null) {
+			return null;
+		}
+
+		return node.left ? this.getMinNode(node.left) : node;
+	}
+
+	getHeight(node: TreeNode<T> | null): number {
+		if (node === null) {
+			return 0;
+		}
+
+		const leftHeight = this.getHeight(node.left);
+		const rightHeight = this.getHeight(node.right);
+
+		return Math.max(leftHeight, rightHeight) + 1;
 	}
 
 	contains(value: T) {
 		return this.find(value) !== null;
 	}
 
+	// Best for print tree
 	inOrderTraversal(callback: (value: T) => void) {
 		function inOrderTraversalRecursive(root: TreeNode<T> | null) {
 			if (root === null) {
@@ -110,6 +93,7 @@ class BinaryTree<T> {
 		inOrderTraversalRecursive(this.root);
 	}
 
+	// best for copying tree
 	preOrderTraversal(callback: (value: T) => void) {
 		function preOrderTraversalRecursive(root: TreeNode<T> | null) {
 			if (root === null) {
@@ -124,6 +108,7 @@ class BinaryTree<T> {
 		preOrderTraversalRecursive(this.root);
 	}
 
+	// best for deleting tree
 	postOrderTraversal(callback: (value: T) => void) {
 		function postOrderTraversalRecursive(root: TreeNode<T> | null) {
 			if (root === null) {
@@ -136,6 +121,65 @@ class BinaryTree<T> {
 		}
 
 		postOrderTraversalRecursive(this.root);
+	}
+
+	private insertRecursive(node: TreeNode<T> | null, v: T): TreeNode<T> {
+		if (node === null) {
+			return this.createNode(v);
+		}
+
+		if (this.compareFunction(v, node.value) <= 0) {
+			node.left = this.insertRecursive(node.left, v);
+		} else {
+			node.right = this.insertRecursive(node.right, v);
+		}
+
+		return this.insertCallback(node)!;
+	}
+
+	private removeRecursive(root: TreeNode<T> | null, v: T) {
+		if (root === null) {
+			return null;
+		}
+
+		if (this.compareFunction(v, root.value) < 0) {
+			root.left = this.removeRecursive(root.left, v);
+		} else if (this.compareFunction(v, root.value) > 0) {
+			root.right = this.removeRecursive(root.right, v);
+		} else {
+			if (root.left === null) {
+				return root.right;
+			}
+
+			if (root.right === null) {
+				return root.left;
+			}
+
+			const minNode = this.getMinNode(root.right);
+
+			if (minNode !== null) {
+				root.value = minNode.value;
+				root.right = this.removeRecursive(root.right, minNode.value);
+			}
+		}
+
+		if (root) {
+			this.removeCallback(root);
+		}
+
+		return root;
+	}
+
+	protected removeCallback(node: TreeNode<T> | null): TreeNode<T> | null {
+		return node;
+	}
+
+	protected insertCallback(node: TreeNode<T> | null): TreeNode<T> | null {
+		return node;
+	}
+
+	protected createNode(value: T): TreeNode<T> {
+		return new TreeNode(value);
 	}
 }
 

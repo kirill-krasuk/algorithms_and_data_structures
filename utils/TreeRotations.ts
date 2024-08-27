@@ -1,6 +1,6 @@
 import type TreeNode from '../data_structures/tree/bst/TreeNode';
 
-class TreeRotations<T> {
+class TreeRotations<T, Node extends TreeNode<T> = TreeNode<T>> {
 	/**
 	 * Zig - правый поворот (по часовой стрелке) вокруг узла.
 	 *
@@ -12,7 +12,7 @@ class TreeRotations<T> {
 	 *               /   \                               /   \
 	 *              2     4                             4     6
 	 */
-	zig(x: TreeNode<T>): TreeNode<T> {
+	zig(x: Node): Node {
 		if (!x.left) {
 			return x;
 		}
@@ -21,7 +21,7 @@ class TreeRotations<T> {
 		x.left = y.right || null;
 		y.right = x;
 
-		return y;
+		return y as Node;
 	}
 
 	/**
@@ -35,7 +35,7 @@ class TreeRotations<T> {
 	 *                     /   \                 /	 \
 	 *                    4     6               2 	  4
 	 */
-	zag(x: TreeNode<T>): TreeNode<T> {
+	zag(x: Node): Node {
 		if (!x.right) {
 			return x;
 		}
@@ -44,7 +44,7 @@ class TreeRotations<T> {
 		x.right = y.left || null;
 		y.left = x;
 
-		return y;
+		return y as Node;
 	}
 
 	/**
@@ -60,7 +60,7 @@ class TreeRotations<T> {
 	 * 																					     /  \
 	 * 																					    4	 6
 	 */
-	zigZig(node: TreeNode<T>): TreeNode<T> {
+	zigZig(node: Node): Node {
 		node = this.zig(node);
 		return this.zig(node);
 	}
@@ -78,7 +78,7 @@ class TreeRotations<T> {
 	 * 																		     /	\
 	 * 																		    2    4
 	 */
-	zagZag(node: TreeNode<T>): TreeNode<T> {
+	zagZag(node: Node): Node {
 		node = this.zag(node);
 		return this.zag(node);
 	}
@@ -96,8 +96,8 @@ class TreeRotations<T> {
 	 * 												 	   \
 	 * 													    6
 	 */
-	zigZag(node: TreeNode<T>): TreeNode<T> {
-		node.right = this.zig(node.right!);
+	zigZag(node: Node): Node {
+		node.right = this.zig(node.right as Node);
 		return this.zag(node);
 	}
 
@@ -114,8 +114,8 @@ class TreeRotations<T> {
 	 * 											 /
 	 * 											2
 	 */
-	zagZig(node: TreeNode<T>): TreeNode<T> {
-		node.left = this.zag(node.left!);
+	zagZig(node: Node): Node {
+		node.left = this.zag(node.left as Node);
 		return this.zig(node);
 	}
 }
